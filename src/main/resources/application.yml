@@ -1,0 +1,86 @@
+spring:
+  application:
+    name: delivery-api
+  
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/delivery}
+    username: ${DB_USERNAME:delivery}
+    password: ${DB_PASSWORD:delivery}
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 5000
+      idle-timeout: 30000
+      max-lifetime: 1800000
+      leak-detection-threshold: 60000
+  
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          batch_size: 50
+          order_inserts: true
+          order_updates: true
+        jakarta:
+          persistence:
+            lock:
+              timeout: 5000
+  
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+server:
+  port: 8080
+  tomcat:
+    threads:
+      max: 200
+      min-spare: 10
+    max-connections: 8192
+    accept-count: 100
+    max-swallow-size: 10MB
+    max-http-form-post-size: 10MB
+  shutdown: graceful
+  spring:
+    lifecycle:
+      timeout-per-shutdown-phase: 30s
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: when-authorized
+    metrics:
+      enabled: true
+  metrics:
+    export:
+      simple:
+        enabled: true
+
+app:
+  security:
+    jwt:
+      secret: ${JWT_SECRET:your-256-bit-secret-key-change-in-production-minimum-32-chars}
+      expiration: 86400000
+  rate-limit:
+    login:
+      max-attempts: 5
+      window-seconds: 60
+    general:
+      max-requests: 100
+      window-seconds: 60
+  pagination:
+    default-size: 20
+    max-size: 50
+  order:
+    max-items: 50
+    max-quantity-per-item: 100

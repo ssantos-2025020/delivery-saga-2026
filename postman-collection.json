@@ -1,0 +1,163 @@
+{
+  "info": {
+    "name": "Delivery API - Microservices",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth Service",
+      "item": [
+        {
+          "name": "Registrar Usuario",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"cliente@example.com\",\n  \"password\": \"password123\",\n  \"nombre\": \"Juan Pérez\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/auth/registro",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "auth", "registro"]
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"cliente@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/auth/login",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "auth", "login"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Catalogo Service",
+      "item": [
+        {
+          "name": "Listar Comercios",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8080/api/v1/comercios?page=0&size=20",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "comercios"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "20"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Listar Productos de Comercio",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8080/api/v1/comercios/1/productos",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "comercios", "1", "productos"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Pedidos Service",
+      "item": [
+        {
+          "name": "Crear Pedido",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer YOUR_TOKEN_HERE"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"items\": [\n    {\n      \"productoId\": 1,\n      \"cantidad\": 2\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/pedidos",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "pedidos"]
+            }
+          }
+        },
+        {
+          "name": "Mis Pedidos",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer YOUR_TOKEN_HERE"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/pedidos/mis-pedidos",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "pedidos", "mis-pedidos"]
+            }
+          }
+        },
+        {
+          "name": "Cancelar Pedido",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer YOUR_TOKEN_HERE"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/pedidos/1/cancelar",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "v1", "pedidos", "1", "cancelar"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: pedidos-service
+  datasource:
+    url: jdbc:postgresql://postgres:admin@postgres:5432/pedidos_db
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: always
+
+catalogo-service:
+  url: http://catalogo-service:8082
+
+internal:
+  api-key: ${INTERNAL_API_KEY:internal-api-key-secret}
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      catalogoService:
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 30s
+        sliding-window-size: 10
+  retry:
+    instances:
+      reservarStock:
+        max-attempts: 2
+        wait-duration: 1s
+      liberarStock:
+        max-attempts: 3
+        wait-duration: 1s

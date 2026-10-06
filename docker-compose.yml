@@ -1,0 +1,82 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: delivery-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: delivery
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - delivery-network
+
+  auth-service:
+    build: ./auth-service
+    container_name: auth-service
+    environment:
+      JWT_SECRET: production-secret-minimum-32-characters
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8081:8081"
+    networks:
+      - delivery-network
+
+  catalogo-service:
+    build: ./catalogo-service
+    container_name: catalogo-service
+    environment:
+      INTERNAL_API_KEY: internal-api-key-secret
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8082:8082"
+    networks:
+      - delivery-network
+
+  pedidos-service:
+    build: ./pedidos-service
+    container_name: pedidos-service
+    environment:
+      JWT_SECRET: production-secret-minimum-32-characters
+      INTERNAL_API_KEY: internal-api-key-secret
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8083:8083"
+    networks:
+      - delivery-network
+
+  api-gateway:
+    build: ./api-gateway
+    container_name: api-gateway
+    depends_on:
+      - auth-service
+      - catalogo-service
+      - pedidos-service
+    ports:
+      - "8080:8080"
+    networks:
+      - delivery-network
+
+volumes:
+  postgres-data:
+    driver: local
+
+networks:
+  delivery-network:
+    driver: bridge

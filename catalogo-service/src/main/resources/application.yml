@@ -1,0 +1,35 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: catalogo-service
+  datasource:
+    url: jdbc:postgresql://postgres:admin@postgres:5432/catalogo_db
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          batch_size: 50
+          order_inserts: true
+          order_updates: true
+        jakarta:
+          persistence:
+            lock:
+              timeout: 5000
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: always
+
+internal:
+  api-key: ${INTERNAL_API_KEY:internal-api-key-secret}

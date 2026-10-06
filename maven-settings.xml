@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+          http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+    <!-- Configuración para resolver problemas de SSL/certificados -->
+    <!-- Usa HTTP en lugar de HTTPS para Maven Central -->
+    <mirrors>
+        <mirror>
+            <id>maven-central-http</id>
+            <name>Maven Central (HTTP)</name>
+            <url>http://repo.maven.apache.org/maven2</url>
+            <mirrorOf>central</mirrorOf>
+        </mirror>
+    </mirrors>
+
+    <!-- Si necesitas proxy corporativo, descomenta y configura esto -->
+    <!--
+    <proxies>
+        <proxy>
+            <id>proxy</id>
+            <active>true</active>
+            <protocol>http</protocol>
+            <host>tu-proxy.corp.com</host>
+            <port>8080</port>
+            <username>usuario</username>
+            <password>password</password>
+        </proxy>
+    </proxies>
+    -->
+
+</settings>
